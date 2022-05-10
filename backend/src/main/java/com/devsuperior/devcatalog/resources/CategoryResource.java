@@ -1,6 +1,5 @@
 package com.devsuperior.devcatalog.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devsuperior.devcatalog.entities.Category;
+import com.devsuperior.devcatalog.dto.CategoryDTO;
 import com.devsuperior.devcatalog.services.CategoryService;
 
 @RestController
@@ -20,8 +19,8 @@ public class CategoryResource {
 	private CategoryService service;
 	
 	@GetMapping
-	public ResponseEntity< List<Category> > findAll(){
-		List<Category> lista = service.findAll();
+	public ResponseEntity< List<CategoryDTO> > findAll(){
+		List<CategoryDTO> lista = service.findAll();
 		
 		return ResponseEntity.ok().body(lista);
 	}
