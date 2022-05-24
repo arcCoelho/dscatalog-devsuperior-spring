@@ -51,7 +51,7 @@ public class CategoryService {
 			repo.save(category);
 			categoryDto = new CategoryDTO(category);
 		} catch (EntityNotFoundException e) {
-			throw new ResourcesNotFoundException("O recurso \"Categoria\" de id: "+id+"não foi encontrado");
+			throw new ResourcesNotFoundException("O recurso 'Categoria' de id: "+id+" não foi encontrado");
 		}
 		return categoryDto;
 	}
