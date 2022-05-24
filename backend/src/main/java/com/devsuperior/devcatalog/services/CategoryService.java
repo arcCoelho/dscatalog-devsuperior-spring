@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.devcatalog.dto.CategoryDTO;
 import com.devsuperior.devcatalog.entities.Category;
 import com.devsuperior.devcatalog.repositories.CategoryRepository;
+import com.devsuperior.devcatalog.services.exceptions.DataBaseException;
 import com.devsuperior.devcatalog.services.exceptions.ResourcesNotFoundException;
 
 @Service
@@ -56,5 +59,14 @@ public class CategoryService {
 		return categoryDto;
 	}
 	
+	public void delete(Long id) {
+		try {
+			repo.deleteById(id);
+		} catch (EmptyResultDataAccessException en) {
+			throw new ResourcesNotFoundException("A categoria informada não existe");
+		} catch (DataIntegrityViolationException ev) {
+			throw new DataBaseException("A categoria informada não pode ser excluida pois existem produtos anexadas a ela.");
+		}
+	}
 	
 }
