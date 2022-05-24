@@ -1,4 +1,4 @@
-package com.devsuperior.devcatalog.categories;
+package com.devsuperior.devcatalog.repositories;
 
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 import org.springframework.stereotype.Repository;
