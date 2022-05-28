@@ -9,6 +9,8 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +69,12 @@ public class CategoryService {
 		} catch (DataIntegrityViolationException ev) {
 			throw new DataBaseException("A categoria informada não pode ser excluida pois existem produtos anexadas a ela.");
 		}
+	}
+
+	@Transactional(readOnly = true)
+	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
+		Page<Category> lista = repo.findAll(pageRequest);
+		return lista.map(x -> new CategoryDTO(x));
 	}
 	
 }
