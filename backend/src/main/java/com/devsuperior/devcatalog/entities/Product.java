@@ -2,6 +2,7 @@ package com.devsuperior.devcatalog.entities;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+
+import com.devsuperior.devcatalog.dto.CategoryDTO;
 
 @Entity(name="tb_product")
 public class Product {
@@ -106,6 +109,10 @@ public class Product {
 		return categories;
 	}
 
+	public void adicionaCategoria(Category c) {
+		categories.add(c);
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
