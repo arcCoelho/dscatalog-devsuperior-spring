@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import com.devsuperior.devcatalog.entities.Category;
 import com.devsuperior.devcatalog.entities.Product;
 import com.devsuperior.devcatalog.repositories.CategoryRepository;
 import com.devsuperior.devcatalog.repositories.ProductRepository;
+import com.devsuperior.devcatalog.services.exceptions.DataBaseException;
 import com.devsuperior.devcatalog.services.exceptions.ResourcesNotFoundException;
 
 @Service
@@ -49,17 +52,27 @@ public class ProductService {
 	
 	@Transactional
 	public ProductDTO update(Long id, ProductDTO dto) {
-		ProductDTO pDto = null;
 		try {
 			Product p = repo.getOne(id);
-			copyDtoToEntity(pDto, p);
+			copyDtoToEntity(dto, p);
 			
 			repo.save(p);
-			pDto = new ProductDTO(p);
+			dto = new ProductDTO(p);
 		} catch (Exception e) {
 			throw new ResourcesNotFoundException("O recurso 'Produto' de id: "+id+" não foi encontrado");
 		}
-		return pDto;
+		return dto;
+	}
+
+	public void delete(Long id) {
+		try {
+			repo.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourcesNotFoundException("O Produto informado não existe");
+		} catch (DataIntegrityViolationException e) {
+			throw new DataBaseException("O Produto informado não pode ser excluido pois existem registros anexados a ele");
+		}
+		
 	}
 
 	private void copyDtoToEntity(ProductDTO dto, Product entity) {
